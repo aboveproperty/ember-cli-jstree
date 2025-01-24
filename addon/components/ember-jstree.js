@@ -102,7 +102,7 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
    * @method _setupJsTree
    */
   _setupJsTree() {
-    return this.$().jstree(this._buildConfig());
+    return $(this.element).jstree(this._buildConfig());
   },
 
   /**
