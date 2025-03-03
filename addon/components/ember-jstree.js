@@ -1,13 +1,13 @@
-import Ember from "ember";
-import Component from "@ember/component";
-import InboundActions from "ember-component-inbound-actions/inbound-actions";
-import EmberJstreeActions from "ember-cli-jstree/mixins/ember-jstree-actions";
-import { registerWaiter, unregisterWaiter } from "@ember/test";
-import { observer } from "@ember/object";
-import { isPresent, typeOf } from "@ember/utils";
-import { A } from "@ember/array";
-import $ from "jquery";
-import { next, schedule } from "@ember/runloop";
+import Ember from 'ember';
+import Component from '@ember/component';
+import InboundActions from 'ember-component-inbound-actions/inbound-actions';
+import EmberJstreeActions from 'ember-cli-jstree/mixins/ember-jstree-actions';
+import { registerWaiter, unregisterWaiter } from '@ember/test';
+import { observer } from '@ember/object';
+import { isPresent, typeOf } from '@ember/utils';
+import { A } from '@ember/array';
+import jQuery from 'jquery';
+import { next, schedule } from '@ember/runloop';
 
 const { testing } = Ember;
 
@@ -47,11 +47,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
   _searchTerm: null,
 
   _isReadyTestWaiter() {
-    return this.get("isReady") === true;
+    return this.isReady === true;
   },
 
   didInsertElement() {
-    schedule("afterRender", this, this.createTree);
+    this._super(...arguments);
+    schedule('afterRender', this, this.createTree);
   },
 
   createTree() {
@@ -64,30 +65,31 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
 
     this._setupEventHandlers(treeObject);
 
-    this.set("treeObject", treeObject);
+    this.set('treeObject', treeObject);
   },
 
   willDestroyElement() {
+    this._super(...arguments);
     if (testing) {
       unregisterWaiter(this, this._isReadyTestWaiter);
     }
 
-    this.set("isReady", false);
-    this.set("_isDestroying", true);
-    this.send("destroy");
+    this.set('isReady', false);
+    this.set('_isDestroying', true);
+    this.send('destroy');
   },
 
   didUpdateAttrs() {
     this._super(...arguments);
 
-    let pluginsArray = this.get("plugins");
+    let pluginsArray = this.plugins;
     if (isPresent(pluginsArray)) {
-      let searchOptions = this.get("searchOptions");
-      if (isPresent(searchOptions) && pluginsArray.indexOf("search") >= 0) {
-        let searchTerm = this.get("searchTerm");
-        if (this.get("_searchTerm") !== searchTerm) {
-          next("afterRender", () => {
-            this.set("_searchTerm", searchTerm);
+      let searchOptions = this.searchOptions;
+      if (isPresent(searchOptions) && pluginsArray.indexOf('search') >= 0) {
+        let searchTerm = this.searchTerm;
+        if (this._searchTerm !== searchTerm) {
+          next('afterRender', () => {
+            this.set('_searchTerm', searchTerm);
             this.getTree().search(searchTerm);
           });
         }
@@ -102,7 +104,7 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
    * @method _setupJsTree
    */
   _setupJsTree() {
-    return $(this.element).jstree(this._buildConfig());
+    return jQuery(this.element).jstree(this._buildConfig());
   },
 
   /**
@@ -113,71 +115,70 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
   _buildConfig() {
     let configObject = {};
 
-    configObject["core"] = {
-      data: this.get("data"),
-      check_callback: this.get("checkCallback"),
-      multiple: this.get("multiple"),
-      worker: this.get("worker")
+    configObject['core'] = {
+      data: this.data,
+      check_callback: this.checkCallback,
+      multiple: this.multiple,
+      worker: this.worker,
     };
 
-    let themes = this.get("themes");
-    if (isPresent(themes) && typeOf(themes) === "object") {
-      configObject["core"]["themes"] = themes;
+    let themes = this.themes;
+    if (isPresent(themes) && typeOf(themes) === 'object') {
+      configObject['core']['themes'] = themes;
     }
 
-    let pluginsArray = this.get("plugins");
+    let pluginsArray = this.plugins;
     if (isPresent(pluginsArray)) {
-      pluginsArray = pluginsArray.replace(/ /g, "").split(",");
-      configObject["plugins"] = pluginsArray;
+      pluginsArray = pluginsArray.replace(/ /g, '').split(',');
+      configObject['plugins'] = pluginsArray;
 
       if (
-        pluginsArray.includes("contextmenu") ||
-        pluginsArray.includes("dnd") ||
-        pluginsArray.includes("unique")
+        pluginsArray.includes('contextmenu') ||
+        pluginsArray.includes('dnd') ||
+        pluginsArray.includes('unique')
       ) {
         // These plugins need core.check_callback
-        configObject["core"]["check_callback"] =
-          configObject["core"]["check_callback"] || true;
+        configObject['core']['check_callback'] =
+          configObject['core']['check_callback'] || true;
       }
 
-      let checkboxOptions = this.get("checkboxOptions");
-      if (isPresent(checkboxOptions) && pluginsArray.includes("checkbox")) {
-        configObject["checkbox"] = checkboxOptions;
+      let checkboxOptions = this.checkboxOptions;
+      if (isPresent(checkboxOptions) && pluginsArray.includes('checkbox')) {
+        configObject['checkbox'] = checkboxOptions;
       }
 
-      let searchOptions = this.get("searchOptions");
-      if (isPresent(searchOptions) && pluginsArray.includes("search")) {
-        configObject["search"] = searchOptions;
+      let searchOptions = this.searchOptions;
+      if (isPresent(searchOptions) && pluginsArray.includes('search')) {
+        configObject['search'] = searchOptions;
       }
 
-      let sort = this.get("sort");
-      if (isPresent(sort) && pluginsArray.includes("sort")) {
-        configObject["sort"] = sort;
+      let sort = this.sort;
+      if (isPresent(sort) && pluginsArray.includes('sort')) {
+        configObject['sort'] = sort;
       }
 
-      let stateOptions = this.get("stateOptions");
-      if (isPresent(stateOptions) && pluginsArray.includes("state")) {
-        configObject["state"] = stateOptions;
+      let stateOptions = this.stateOptions;
+      if (isPresent(stateOptions) && pluginsArray.includes('state')) {
+        configObject['state'] = stateOptions;
       }
 
-      let typesOptions = this.get("typesOptions");
-      if (isPresent(typesOptions) && pluginsArray.includes("types")) {
-        configObject["types"] = typesOptions;
+      let typesOptions = this.typesOptions;
+      if (isPresent(typesOptions) && pluginsArray.includes('types')) {
+        configObject['types'] = typesOptions;
       }
 
-      let contextmenuOptions = this.get("contextmenuOptions");
+      let contextmenuOptions = this.contextmenuOptions;
       if (
         isPresent(contextmenuOptions) &&
-        pluginsArray.includes("contextmenu")
+        pluginsArray.includes('contextmenu')
       ) {
-        configObject["contextmenu"] = this._setupContextMenus(
-          contextmenuOptions
-        );
+        configObject['contextmenu'] =
+          this._setupContextMenus(contextmenuOptions);
       }
 
-      let dndOptions = this.get("dndOptions");
-      if (isPresent(dndOptions) && pluginsArray.includes("dnd")) {
-        configObject["dnd"] = dndOptions;
+      let dndOptions = this.dndOptions;
+      if (isPresent(dndOptions) && pluginsArray.includes('dnd')) {
+        configObject['dnd'] = dndOptions;
       }
     }
 
@@ -192,25 +193,25 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
    * @return {Array} An Array of Ember-friendly options to pass back into the config object
    */
   _setupContextMenus(contextmenuOptions) {
-    if (typeOf(contextmenuOptions["items"]) === "object") {
+    if (typeOf(contextmenuOptions['items']) === 'object') {
       let newMenuItems = {};
-      let menuItems = Object.keys(contextmenuOptions["items"]);
+      let menuItems = Object.keys(contextmenuOptions['items']);
       for (let menuItem of menuItems) {
-        let itemData = contextmenuOptions["items"][menuItem];
+        let itemData = contextmenuOptions['items'][menuItem];
         newMenuItems[menuItem] = itemData;
 
         // Only change if not a function
         // This needs to be done to handle Ember actions
-        if (typeOf(itemData["action"]) !== "function") {
-          let emberAction = itemData["action"];
+        if (typeOf(itemData['action']) !== 'function') {
+          let emberAction = itemData['action'];
 
-          newMenuItems[menuItem]["action"] = data => {
-            this.send("contextmenuItemDidClick", emberAction, data);
+          newMenuItems[menuItem]['action'] = (data) => {
+            this.send('contextmenuItemDidClick', emberAction, data);
           };
         }
       }
 
-      contextmenuOptions["items"] = newMenuItems;
+      contextmenuOptions['items'] = newMenuItems;
     }
 
     return contextmenuOptions;
@@ -225,9 +226,9 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
    * @return
    */
   _setupEventHandlers(treeObject) {
-    if (typeof treeObject !== "object") {
+    if (typeof treeObject !== 'object') {
       throw new Error(
-        "You must pass a valid jsTree object to set up its event handlers"
+        'You must pass a valid jsTree object to set up its event handlers'
       );
     }
 
@@ -236,12 +237,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidInit
           triggered after all events are bound
         */
-    treeObject.on("init.jstree", () => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('init.jstree', () => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.callAction("eventDidInit");
+        this.callAction('eventDidInit');
       });
     });
 
@@ -250,12 +251,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventIsLoading
           triggered after the loading text is shown and before loading starts
         */
-    treeObject.on("loading.jstree", () => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('loading.jstree', () => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.callAction("eventIsLoading");
+        this.callAction('eventIsLoading');
       });
     });
 
@@ -264,12 +265,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidLoad
           triggered after the root node is loaded for the first time
         */
-    treeObject.on("loaded.jstree", () => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('loaded.jstree', () => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.callAction("eventDidLoad");
+        this.callAction('eventDidLoad');
       });
     });
 
@@ -278,13 +279,13 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidBecomeReady
           triggered after all nodes are finished loading
         */
-    treeObject.on("ready.jstree", () => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('ready.jstree', () => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.set("isReady", true);
-        this.callAction("eventDidBecomeReady");
+        this.set('isReady', true);
+        this.callAction('eventDidBecomeReady');
       });
     });
 
@@ -293,12 +294,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidRedraw
           triggered after nodes are redrawn
         */
-    treeObject.on("redraw.jstree", () => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('redraw.jstree', () => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.callAction("eventDidRedraw");
+        this.callAction('eventDidRedraw');
       });
     });
 
@@ -307,12 +308,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidOpen
           triggered when a node is opened and the animation is complete
         */
-    treeObject.on("after_open.jstree", (event, data) => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('after_open.jstree', (event, data) => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.callAction("eventDidOpen", data.node);
+        this.callAction('eventDidOpen', data.node);
       });
     });
 
@@ -321,12 +322,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidClose
           triggered when a node is closed and the animation is complete
         */
-    treeObject.on("after_close.jstree", (event, data) => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('after_close.jstree', (event, data) => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.callAction("eventDidClose", data.node);
+        this.callAction('eventDidClose', data.node);
       });
     });
 
@@ -335,13 +336,13 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidSelectNode
           triggered when an node is selected
         */
-    treeObject.on("select_node.jstree", (event, data) => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('select_node.jstree', (event, data) => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
         this.callAction(
-          "eventDidSelectNode",
+          'eventDidSelectNode',
           data.node,
           data.selected,
           data.event
@@ -354,13 +355,13 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidDeselectNode
           triggered when an node is deselected
         */
-    treeObject.on("deselect_node.jstree", (event, data) => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('deselect_node.jstree', (event, data) => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
         this.callAction(
-          "eventDidDeselectNode",
+          'eventDidDeselectNode',
           data.node,
           data.selected,
           data.event
@@ -373,35 +374,31 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: jstreeDidChange
           triggered when selection changes
         */
-    treeObject.on("changed.jstree", (event, data) => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('changed.jstree', (event, data) => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
 
         // Check if selection changed
-        if (isPresent(this.get("treeObject"))) {
+        if (isPresent(this.treeObject)) {
           let selectionChangedEventNames = [
-            "model",
-            "select_node",
-            "deselect_node",
-            "select_all",
-            "deselect_all"
+            'model',
+            'select_node',
+            'deselect_node',
+            'select_all',
+            'deselect_all',
           ];
           if (
             isPresent(data.action) &&
             selectionChangedEventNames.includes(data.action)
           ) {
-            let selNodes = A(
-              this.get("treeObject")
-                .jstree(true)
-                .get_selected(true)
-            );
-            this.set("selectedNodes", selNodes);
+            let selNodes = A(this.treeObject.jstree(true).get_selected(true));
+            this.set('selectedNodes', selNodes);
           }
         }
 
-        this.callAction("eventDidChange", data);
+        this.callAction('eventDidChange', data);
       });
     });
 
@@ -410,12 +407,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidHoverNode
           triggered when a node is hovered
         */
-    treeObject.on("hover_node.jstree", (event, data) => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('hover_node.jstree', (event, data) => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.callAction("eventDidHoverNode", data.node);
+        this.callAction('eventDidHoverNode', data.node);
       });
     });
 
@@ -424,12 +421,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidDehoverNode
           triggered when a node is no longer hovered
         */
-    treeObject.on("dehover_node.jstree", (event, data) => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('dehover_node.jstree', (event, data) => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.callAction("eventDidDehoverNode", data.node);
+        this.callAction('eventDidDehoverNode', data.node);
       });
     });
 
@@ -438,12 +435,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidShowNode
           triggered when a node is no longer hovered
         */
-    treeObject.on("show_node.jstree", (event, data) => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('show_node.jstree', (event, data) => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.callAction("eventDidShowNode", data.node);
+        this.callAction('eventDidShowNode', data.node);
       });
     });
 
@@ -452,45 +449,45 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
           Action: eventDidMoveNode
           triggered when a node is moved
         */
-    treeObject.on("move_node.jstree", (event, data) => {
-      next(this, function() {
-        if (this.get("isDestroyed") || this.get("isDestroying")) {
+    treeObject.on('move_node.jstree', (event, data) => {
+      next(this, function () {
+        if (this.isDestroyed || this.isDestroying) {
           return;
         }
-        this.callAction("eventDidMoveNode", data);
+        this.callAction('eventDidMoveNode', data);
       });
     });
 
-    let pluginsArray = this.get("plugins");
+    let pluginsArray = this.plugins;
 
-    if (isPresent(pluginsArray) && pluginsArray.indexOf("search") > -1) {
+    if (isPresent(pluginsArray) && pluginsArray.indexOf('search') > -1) {
       /*
            Event: search.jstree
            Action: eventDidSearch
            triggered when a search action is performed
       */
-      treeObject.on("search.jstree", (event, data) => {
-        next(this, function() {
-          if (this.get("isDestroyed") || this.get("isDestroying")) {
+      treeObject.on('search.jstree', (event, data) => {
+        next(this, function () {
+          if (this.isDestroyed || this.isDestroying) {
             return;
           }
-          this.callAction("eventDidSearch", event, data);
+          this.callAction('eventDidSearch', event, data);
         });
       });
     }
 
-    if (isPresent(pluginsArray) && pluginsArray.indexOf("checkbox") > -1) {
+    if (isPresent(pluginsArray) && pluginsArray.indexOf('checkbox') > -1) {
       /*
            Event: disable_checkbox.jstree
            Action: eventDidDisableCheckbox
            triggered when an node's checkbox is disabled
          */
-      treeObject.on("disable_checkbox.jstree", (event, data) => {
-        next(this, function() {
-          if (this.get("isDestroyed") || this.get("isDestroying")) {
+      treeObject.on('disable_checkbox.jstree', (event, data) => {
+        next(this, function () {
+          if (this.isDestroyed || this.isDestroying) {
             return;
           }
-          this.callAction("eventDidDisableCheckbox", data.node);
+          this.callAction('eventDidDisableCheckbox', data.node);
         });
       });
 
@@ -499,31 +496,31 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
            Action: eventDidEnableCheckbox
            triggered when an node's checkbox is enabled
          */
-      treeObject.on("enable_checkbox.jstree", (event, data) => {
-        next(this, function() {
-          if (this.get("isDestroyed") || this.get("isDestroying")) {
+      treeObject.on('enable_checkbox.jstree', (event, data) => {
+        next(this, function () {
+          if (this.isDestroyed || this.isDestroying) {
             return;
           }
-          this.callAction("eventDidEnableCheckbox", data.node);
+          this.callAction('eventDidEnableCheckbox', data.node);
         });
       });
 
       if (
-        isPresent("checkboxOptions.tie_selected") &&
-        !this.get("checkboxOptions.tie_selected")
+        isPresent('checkboxOptions.tie_selected') &&
+        !this.get('checkboxOptions.tie_selected')
       ) {
         /*
              Event: check_node.jstree
              Action: eventDidCheckNode
              triggered when an node is checked (only if tie_selection in checkbox settings is false)
            */
-        treeObject.on("check_node.jstree", (event, data) => {
-          next(this, function() {
-            if (this.get("isDestroyed") || this.get("isDestroying")) {
+        treeObject.on('check_node.jstree', (event, data) => {
+          next(this, function () {
+            if (this.isDestroyed || this.isDestroying) {
               return;
             }
             this.callAction(
-              "eventDidCheckNode",
+              'eventDidCheckNode',
               data.node,
               data.selected,
               data.event
@@ -536,13 +533,13 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
              Action: eventDidUncheckNode
              triggered when an node is unchecked (only if tie_selection in checkbox settings is false)
            */
-        treeObject.on("uncheck_node.jstree", (event, data) => {
-          next(this, function() {
-            if (this.get("isDestroyed") || this.get("isDestroying")) {
+        treeObject.on('uncheck_node.jstree', (event, data) => {
+          next(this, function () {
+            if (this.isDestroyed || this.isDestroying) {
               return;
             }
             this.callAction(
-              "eventDidUncheckNode",
+              'eventDidUncheckNode',
               data.node,
               data.selected,
               data.event
@@ -555,12 +552,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
              Action: eventDidCheckAll
              triggered when all nodes are checked (only if tie_selection in checkbox settings is false)
            */
-        treeObject.on("check_all.jstree", (event, data) => {
-          next(this, function() {
-            if (this.get("isDestroyed") || this.get("isDestroying")) {
+        treeObject.on('check_all.jstree', (event, data) => {
+          next(this, function () {
+            if (this.isDestroyed || this.isDestroying) {
               return;
             }
-            this.callAction("eventDidCheckAll", data.selected);
+            this.callAction('eventDidCheckAll', data.selected);
           });
         });
 
@@ -569,12 +566,12 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
              Action: eventDidUncheckAll
              triggered when all nodes are unchecked (only if tie_selection in checkbox settings is false)
            */
-        treeObject.on("uncheck_all.jstree", (event, data) => {
-          next(this, function() {
-            if (this.get("isDestroyed") || this.get("isDestroying")) {
+        treeObject.on('uncheck_all.jstree', (event, data) => {
+          next(this, function () {
+            if (this.isDestroyed || this.isDestroying) {
               return;
             }
-            this.callAction("eventDidUncheckAll", data.node, data.selected);
+            this.callAction('eventDidUncheckAll', data.node, data.selected);
           });
         });
       }
@@ -587,32 +584,32 @@ export default Component.extend(InboundActions, EmberJstreeActions, {
    *
    * @method _redrawTree
    */
-  _refreshTree: observer("data", function() {
+  _refreshTree: observer('data', function () {
     let tree = this.getTree();
     if (null !== tree && false !== tree) {
-      tree.settings.core["data"] = this.get("data");
-      tree.refresh(this.get("skipLoading"), this.get("forgetState"));
+      tree.settings.core['data'] = this.data;
+      tree.refresh(this.skipLoading, this.forgetState);
     } else {
       // setup again if destroyed
       let treeObject = this._setupJsTree();
       this._setupEventHandlers(treeObject);
-      this.set("treeObject", treeObject);
+      this.set('treeObject', treeObject);
     }
   }),
 
   getTree() {
-    let tree = this.get("treeObject");
+    let tree = this.treeObject;
     return tree.jstree(true);
   },
 
   actions: {
     contextmenuItemDidClick(actionName, data) {
-      let emberTreeObj = this.get("getTree");
+      let emberTreeObj = this.getTree;
 
-      let instance = $.jstree.reference(data.reference);
+      let instance = jQuery.jstree.reference(data.reference);
       let node = instance.get_node(data.reference);
 
       this.callAction(actionName, node, emberTreeObj);
-    }
-  }
+    },
+  },
 });

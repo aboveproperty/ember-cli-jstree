@@ -6,9 +6,16 @@ Brings [jsTree](http://www.jstree.com/) functionality into your Ember app.
 
 Demo: http://ritesh83.github.io/ember-cli-jstree/#/static
 
-## Installation
+Compatibility
+------------------------------------------------------------------------------
 
-Ember CLI addons can be installed with `ember install`
+* Ember.js v3.24 or above
+* Ember CLI v3.24 or above
+* Node.js v12 or above
+
+
+Installation
+------------------------------------------------------------------------------
 
 ```
 ember install ember-cli-jstree
