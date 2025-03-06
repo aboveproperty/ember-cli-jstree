@@ -83,7 +83,7 @@
     "ember-cli-babel": "^7.26.10",
     "ember-cli-htmlbars": "^5.7.2",
     "ember-lifeline": "^7.0.0",
-    "jstree": "^3.3.5"
+    "jstree": "^3.3.17"
   },
   "ember": {
     "edition": "octane"
