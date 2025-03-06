@@ -1,0 +1,8 @@
+<div
+  {{did-insert this.createTree}}
+  {{did-update this._refreshTree this.data}}
+  {{did-update this.updateSearch @searchTerm this.plugins this.searchOptions}}
+  {{will-destroy this.teardownJsTree}}
+>
+  {{yield}}
+</div>

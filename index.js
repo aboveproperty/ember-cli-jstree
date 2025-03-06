@@ -28,7 +28,13 @@ module.exports = {
   treeForVendor(tree) {
     let registerVersionTree = writeFile(
       'ember-cli-jstree/register-version.js',
-      `Ember.libraries.register('Ember CLI jsTree', '${version}')`
+      `let emberLibraries;
+                try {
+                  emberLibraries = requireModule('ember')['default'].libraries;
+                } catch {
+                  emberLibraries = window.Ember.libraries;
+                }
+                emberLibraries?.register('Ember CLI jsTree', '${version}');`
     );
 
     let stylesTree = new Funnel(

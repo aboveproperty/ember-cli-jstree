@@ -10,7 +10,7 @@ module.exports = {
       legacyDecorators: true,
     },
   },
-  plugins: ["ember", "prettier"],
+  plugins: ['ember', 'prettier'],
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended',
@@ -35,7 +35,7 @@ module.exports = {
         './tests/dummy/config/**/*.js',
       ],
       parserOptions: {
-        sourceType: "script",
+        sourceType: 'script',
       },
       env: {
         browser: false,

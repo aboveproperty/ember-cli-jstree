@@ -1,82 +1,79 @@
 <h1 class="example-header">Static Tree</h1>
 
 <div class="sample-tree col-xs-3 col-sm-5">
-    {{ember-jstree
-        actionReceiver=jstreeActionReceiver
-        selectedNodes=jstreeSelectedNodes
-
-        data=data
-        plugins=plugins
-        themes=themes
-
-        checkboxOptions=checkboxOptions
-        contextmenuOptions=contextmenuOptions
-        contextMenuReportClicked=(action "contextMenuReportClicked")
-        searchOptions=searchOptions
-        stateOptions=stateOptions
-        typesOptions=typesOptions
-        searchTerm=searchTerm
-
-        eventDidBecomeReady=(action "handleTreeDidBecomeReady")
-
-        actionGetNode=(action "handleGetNode")
-    }}
+  <EmberJstree
+    @data={{this.data}}
+    @plugins={{this.plugins}}
+    @themes={{this.themes}}
+    @checkboxOptions={{this.checkboxOptions}}
+    @contextmenuOptions={{this.contextmenuOptions}}
+    @contextMenuReportClicked={{this.contextMenuReportClicked}}
+    @searchOptions={{this.searchOptions}}
+    @stateOptions={{this.stateOptions}}
+    @typesOptions={{this.typesOptions}}
+    @searchTerm={{this.searchTerm}}
+    @eventDidBecomeReady={{this.handleTreeDidBecomeReady}}
+    @actionGetNode={{this.handleGetNode}}
+    @onSetupActionReceiver={{fn this.updateField "jstreeActionReceiver"}}
+    @onUpdateSelectedNodes={{fn this.updateField "jstreeSelectedNode"}}
+  />
 </div>
 
 <div class="info col-xs-9 col-sm-7">
-    <div class="status">
-        <h2 style="margin-top:0px">Tree Status</h2>
-        <p class="tree-status {{if treeReady "tree-ready" "tree-not-ready"}}">
-            Tree Ready?
-            <strong>
-                {{#if treeReady}}
-                    Yes
-                {{else}}
-                    No
-                {{/if}}
-            </strong>
-        </p>
-        <p>Last Context Item Clicked: <strong>{{lastItemClicked}}</strong></p>
-    </div>
-
-    <hr />
-
-    <div class="selected">
-        <h2>Selected Items</h2>
-        {{#if sortedSelectedNodes}}
-            <ul>
-            {{#each sortedSelectedNodes as |node|}}
-                <li><strong>{{node.text}}</strong></li>
-            {{/each}}
-            </ul>
+  <div class="status">
+    <h2 style="margin-top:0px">Tree Status</h2>
+    <p class="tree-status {{if this.treeReady "tree-ready" "tree-not-ready"}}">
+      Tree Ready?
+      <strong>
+        {{#if this.treeReady}}
+          Yes
+        {{else}}
+          No
         {{/if}}
-    </div>
+      </strong>
+    </p>
+    <p>Last Context Item Clicked: <strong>{{this.lastItemClicked}}</strong></p>
+  </div>
 
-    <hr />
+  <hr/>
 
-    <div class="actions ember-test-actions">
-        <h2>Actions</h2>
-        <button {{action "getNode" "rn2"}} class="ember-test-getnode-button btn btn-default">Get "Opened node"</button>
-        <br><br>
-        <button class="btn btn-default" {{action "redraw"}}>Redraw</button>
-        <br><br>
-        <button {{action "destroy"}} class="ember-test-destroy-button btn btn-default">Destroy</button>
-        <br><br>
-        <button class="btn btn-default" {{action "addChildByText" "Opened node (has tooltip)"}}>Add child to "Opened node"</button>
-    </div>
+  <div class="selected">
+    <h2>Selected Items</h2>
+    {{#if this.sortedSelectedNodes}}
+      <ul>
+        {{#each this.sortedSelectedNodes as |node|}}
+          <li><strong>{{node.text}}</strong></li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  </div>
 
-    <hr />
+  <hr/>
 
-    <div class="search">
-      <h2>Search</h2>
-      {{input type="text" placeholder="Search" class="search-input form-control" value=searchTerm}}
-    </div>
+  <div class="actions ember-test-actions">
+    <h2>Actions</h2>
+    <button class="ember-test-getnode-button btn btn-default" type="button" {{on "click" (fn this.getNode "rn2")}}>Get "Opened node"</button>
+    <br><br>
+    <button class="btn btn-default" type="button" {{on "click" this.redraw}}>Redraw</button>
+    <br><br>
+    <button class="ember-test-destroy-button btn btn-default" type="button" {{on "click" this.destroyTree}}>Destroy</button>
+    <br><br>
+    <button class="btn btn-default" type="button" {{on "click" (fn this.addChildByText "Opened node (has tooltip)")}}>Add child to "Opened node"
+    </button>
+  </div>
 
-    <hr />
+  <hr/>
 
-    <div class="buffer">
-        <h2>Buffer Console</h2>
-        <pre class="ember-test-buffer">{{jsonifiedBuffer}}</pre>
-    </div>
+  <div class="search">
+    <h2>Search</h2>
+    <Input @type="text" placeholder="Search" class="search-input form-control" @value={{this.searchTerm}} />
+  </div>
+
+  <hr/>
+
+  <div class="buffer">
+    <h2>Buffer Console</h2>
+    <pre class="ember-test-buffer">{{this.jsonifiedBuffer}}</pre>
+  </div>
 
 </div>

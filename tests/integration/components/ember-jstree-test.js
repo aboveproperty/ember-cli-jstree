@@ -1,4 +1,4 @@
-import { render, find } from '@ember/test-helpers';
+import { render, find, click } from '@ember/test-helpers';
 import { setupRenderingTest } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import jQuery from 'jquery';
@@ -8,6 +8,7 @@ module('Integration | Component | ember-jstree', function (hooks) {
   setupRenderingTest(hooks);
 
   test('events#eventDidOpen', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -17,17 +18,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidOpen=eventDidOpen
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidOpen={{this.eventDidOpen}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('after_open.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('after_open.jstree', data);
   });
 
   test('events#eventDidClose', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -37,17 +38,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidClose=eventDidClose
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidClose={{this.eventDidClose}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('after_close.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('after_close.jstree', data);
   });
 
   test('events#eventDidChange', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -57,17 +58,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidChange=eventDidChange
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidChange={{this.eventDidChange}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('changed.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('changed.jstree', data);
   });
 
   test('events#eventDidDehoverNode', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -77,17 +78,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidDehoverNode=eventDidDehoverNode
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidDehoverNode={{this.eventDidDehoverNode}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('dehover_node.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('dehover_node.jstree', data);
   });
 
   test('events#eventDidDeselectNode', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -97,17 +98,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidDeselectNode=eventDidDeselectNode
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidDeselectNode={{this.eventDidDeselectNode}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('deselect_node.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('deselect_node.jstree', data);
   });
 
   test('events#eventDidHoverNode', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -117,17 +118,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidHoverNode=eventDidHoverNode
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidHoverNode={{this.eventDidHoverNode}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('hover_node.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('hover_node.jstree', data);
   });
 
   test('events#eventDidInit', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -137,17 +138,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidInit=eventDidInit
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidInit={{this.eventDidInit}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('init.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('init.jstree', data);
   });
 
   test('events#eventIsLoading', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -157,17 +158,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventIsLoading=eventIsLoading
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventIsLoading={{this.eventIsLoading}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('loading.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('loading.jstree', data);
   });
 
   test('events#eventDidLoad', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -177,17 +178,15 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidLoad=eventDidLoad
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidLoad={{this.eventDidLoad}}
+      />
     `);
-
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('loaded.jstree', data);
   });
 
   test('events#eventDidBecomeReady', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -197,17 +196,15 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidBecomeReady=eventDidBecomeReady
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidBecomeReady={{this.eventDidBecomeReady}}
+      />
     `);
-
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('ready.jstree', data);
   });
 
   test('events#eventDidRedraw', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -217,17 +214,15 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidRedraw=eventDidRedraw
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidRedraw={{this.eventDidRedraw}}
+      />
     `);
-
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('redraw.jstree', data);
   });
 
   test('events#eventDidShowNode', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -237,17 +232,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidShowNode=eventDidShowNode
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidShowNode={{this.eventDidShowNode}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('show_node.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('show_node.jstree', data);
   });
 
   test('events#eventDidSelectNode', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -257,17 +252,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidSelectNode=eventDidSelectNode
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidSelectNode={{this.eventDidSelectNode}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('select_node.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('select_node.jstree', data);
   });
 
   test('events#eventDidDestroy', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -277,14 +272,15 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidDestroy=eventDidDestroy
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidDestroy={{this.eventDidDestroy}}
+      />
     `);
   });
 
   test('events#eventDidMoveNode', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -294,17 +290,17 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        eventDidMoveNode=eventDidMoveNode
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @eventDidMoveNode={{this.eventDidMoveNode}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('move_node.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('move_node.jstree', data);
   });
 
   test('events#eventDidDisableCheckbox', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -314,18 +310,18 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        plugins='checkbox'
-        eventDidDisableCheckbox=eventDidDisableCheckbox
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @plugins='checkbox'
+        @eventDidDisableCheckbox={{this.eventDidDisableCheckbox}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('disable_checkbox.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('disable_checkbox.jstree', data);
   });
 
   test('events#eventDidEnableCheckbox', async function (assert) {
+    assert.expect(1);
     const data = { node: {} };
     this.setProperties({
       data,
@@ -335,88 +331,104 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        plugins='checkbox'
-        eventDidEnableCheckbox=eventDidEnableCheckbox
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @plugins='checkbox'
+        @eventDidEnableCheckbox={{this.eventDidEnableCheckbox}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('enable_checkbox.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('enable_checkbox.jstree', data);
   });
 
   test('events#eventDidCheckNode', async function (assert) {
-    const data = { node: {}, selected: {}, event: {} };
+    assert.expect(3);
+    const data = {
+      node: {},
+      selected: {},
+      event: {},
+    };
     this.setProperties({
       data,
+      checkboxOptions: { tie_selection: false },
       eventDidCheckNode(node, selected, event) {
-        assert.equal(node, data.node);
-        assert.equal(selected, data.selected);
-        assert.equal(event, data.event);
+        assert.ok(node);
+        assert.strictEqual(selected[0], node.id);
+        assert.strictEqual(event.type, 'click');
       },
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        plugins='checkbox'
-        eventDidCheckNode=eventDidCheckNode
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @plugins='checkbox'
+        @checkboxOptions={{this.checkboxOptions}}
+        @eventDidCheckNode={{this.eventDidCheckNode}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('check_node.jstree', data);
+    await click('.jstree-last .jstree-anchor');
   });
 
   test('events#eventDidUncheckNode', async function (assert) {
-    const data = { node: {}, selected: {}, event: {} };
+    assert.expect(3);
+    const data = {
+      node: { id: '#' },
+      selected: {},
+      event: {},
+    };
     this.setProperties({
       data,
+      checkboxOptions: { tie_selection: false },
       eventDidUncheckNode(node, selected, event) {
-        assert.equal(node, data.node);
-        assert.equal(selected, data.selected);
-        assert.equal(event, data.event);
+        assert.ok(node);
+        assert.strictEqual(selected.length, 0);
+        assert.strictEqual(event.type, 'click');
       },
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        plugins='checkbox'
-        eventDidUncheckNode=eventDidUncheckNode
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @plugins='checkbox'
+        @checkboxOptions={{this.checkboxOptions}}
+        @eventDidUncheckNode={{this.eventDidUncheckNode}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('uncheck_node.jstree', data);
+    await click('.jstree-last .jstree-anchor');
+    await click('.jstree-last .jstree-anchor');
   });
 
   test('events#eventDidCheckAll', async function (assert) {
+    assert.expect(1);
     const data = { selected: {} };
     this.setProperties({
       data,
+      checkboxOptions: { tie_selection: false },
       eventDidCheckAll(e) {
         assert.equal(e, data.selected);
       },
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        plugins='checkbox'
-        eventDidCheckAll=eventDidCheckAll
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @plugins='checkbox'
+        @checkboxOptions={{this.checkboxOptions}}
+        @eventDidCheckAll={{this.eventDidCheckAll}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('check_all.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('check_all.jstree', data);
   });
 
   test('events#eventDidUncheckAll', async function (assert) {
+    assert.expect(2);
     const data = { node: {}, selected: {} };
     this.setProperties({
       data,
+      checkboxOptions: { tie_selection: false },
       eventDidUncheckAll(node, selected) {
         assert.equal(node, data.node);
         assert.equal(selected, data.selected);
@@ -424,14 +436,14 @@ module('Integration | Component | ember-jstree', function (hooks) {
     });
 
     await render(hbs`
-      {{ember-jstree
-        data=data
-        plugins='checkbox'
-        eventDidUncheckAll=eventDidUncheckAll
-      }}
+      <EmberJstree
+        @data={{this.data}}
+        @plugins='checkbox'
+        @checkboxOptions={{this.checkboxOptions}}
+        @eventDidUncheckAll={{this.eventDidUncheckAll}}
+      />
     `);
 
-    const tree = jQuery(find('.jstree'));
-    tree.trigger('uncheck_all.jstree', data);
+    jQuery.jstree.reference('.jstree').trigger('uncheck_all.jstree', data);
   });
 });
