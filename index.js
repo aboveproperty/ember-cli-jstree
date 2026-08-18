@@ -26,17 +26,6 @@ module.exports = {
   },
 
   treeForVendor(tree) {
-    let registerVersionTree = writeFile(
-      'ember-cli-jstree/register-version.js',
-      `let emberLibraries;
-                try {
-                  emberLibraries = requireModule('ember')['default'].libraries;
-                } catch {
-                  emberLibraries = window.Ember.libraries;
-                }
-                emberLibraries?.register('Ember CLI jsTree', '${version}');`
-    );
-
     let stylesTree = new Funnel(
       path.join(this._jstreePath(), 'dist/themes/default'),
       {
@@ -51,10 +40,10 @@ module.exports = {
     });
 
     return tree
-      ? mergeTrees([tree, registerVersionTree, jsTree, stylesTree], {
+      ? mergeTrees([tree, jsTree, stylesTree], {
           overwrite: true,
         })
-      : mergeTrees([registerVersionTree, jsTree, stylesTree], {
+      : mergeTrees([jsTree, stylesTree], {
           overwrite: true,
         });
   },
