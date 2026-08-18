@@ -22,7 +22,6 @@ module.exports = {
 
     app.import('vendor/ember-cli-jstree/jstree.js');
     app.import('vendor/ember-cli-jstree/style.css');
-    app.import('vendor/ember-cli-jstree/register-version.js');
   },
 
   treeForVendor(tree) {
